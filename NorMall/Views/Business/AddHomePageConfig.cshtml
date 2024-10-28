@@ -1,0 +1,38 @@
+﻿@model HomePageConfig
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+
+<h2>Add a new home page configuration</h2>
+
+<form method="post" asp-controller="Business" asp-action="AddHomePageConfig" enctype="multipart/form-data">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    
+    <div class="row mb-3">
+        <label class="col-sm-1 col-form-label">Configuration name</label>
+        <div class="col-sm-3">
+            <input asp-for="Name" type="text" class="form-control custom-input" required>
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+    </div>
+    
+    <div class="row mb-3">
+        <label class="col-sm-1 col-form-label">Top banner</label>
+        <div class="col-sm-3">
+            <input asp-for="Images[0].ImageFile" type="file" class="form-control custom-input" accept="image/*" required>
+            <span asp-validation-for="Images[0].ImageFile" class="text-danger"></span>
+        </div>
+    </div>
+        
+    <div class="row mb-3">
+        <label class="col-sm-1 col-form-label">Right advertisement</label>
+        <div class="col-sm-3">
+            <input asp-for="Images[1].ImageFile" type="file" class="form-control custom-input" accept="image/*" required>
+            <span asp-validation-for="Images[1].ImageFile" class="text-danger"></span>
+        </div>
+    </div>
+
+    <input type="submit" id="Submit" class="btn btn-primary" value="Save">
+</form>

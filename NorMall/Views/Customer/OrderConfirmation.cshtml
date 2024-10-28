@@ -1,0 +1,64 @@
+@using NorMall.Data
+@using Microsoft.EntityFrameworkCore
+@model Order
+@inject ApplicationDbContext db
+
+@{
+    ViewBag.Title = "Order Confirmation";
+}
+<h2>Order Confirmation</h2>
+<p>Thank you for your order! A confirmation email has been sent to you.</p>
+<p>Your order will be shipped within one week.</p>
+<p>Order ID: @Model.Id</p>
+<p>Order Date: @Model.DateTime.ToString("g")</p>
+
+<div class="row">
+    
+    <table class="table order-history-table text-center">
+        <thead>
+
+        <tr>
+            <th>Product</th>
+            <th>Price</th>
+            <th>Amount</th>
+            <th>Image</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        @{
+            var order = await db.Orders.Include(o => o.ProductOrdered).
+                FirstOrDefaultAsync(p => p.Id == Model.Id);
+
+
+            foreach (var productOrdered in Model.ProductOrdered)
+            {
+                <tr class="order-history-element">
+                    @{
+                        var productId = productOrdered.ProductId;
+                        var product = await db.Products.Include(p => p.Images).FirstOrDefaultAsync(p => p.Id == productId);
+                        if (product != null)
+                        {
+                            <td>@product.Name</td>
+                            <td>@product.Price</td>
+                            <td>@productOrdered.Quantity</td>
+                            <td class="order-history-image">
+                                @{
+                                    var image = product.Images.FirstOrDefault(i => i.OrderIndex == 0);
+
+                                    if (image != null)
+                                    {
+                                        <img src="@Url.Action("GetImage", "Home", new { id = image.Id })" alt="Image"/>
+                                    }
+                                }
+                            </td>
+                        }
+
+                    }
+                </tr>
+            }
+
+        }
+        </tbody>
+    </table>
+</div>

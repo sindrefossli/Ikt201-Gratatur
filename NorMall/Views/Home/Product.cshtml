@@ -1,0 +1,103 @@
+@using Microsoft.AspNetCore.Identity
+@model Product
+@inject SignInManager<ApplicationUser> signInManager;
+
+@{
+    ViewBag.Title = Model.Name;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<a asp-action="BusinessFrontPage" asp-controller="Home" asp-route-businessId="@Model.BusinessId" style="text-decoration: none">
+    <div class="back-button">
+        <img src="~/Images/BackArrow.png" alt="BackArrow"/>
+        <div style="margin-right: 30px">Back</div>
+    </div>
+</a>
+
+<h2>@Model.Name</h2>
+
+<div class="row">
+    <div class="col-md-6">
+            <div id="imageCarousel" class="carousel slide" data-ride="carousel">
+                <div id="carouselImages" class="carousel-inner">
+                    @{
+                        var isFirst = true;
+                        if (Model.Images.Count != 0)
+                        {
+                            foreach (var image in Model.Images.OrderBy(i => i.OrderIndex))
+                            {
+                                <div class="carousel-item @(isFirst ? "active" : "")">
+                                    <div class="image-container">
+                                        <img src="@Url.Action("GetImage", "Home", new { id = image.Id })" alt="Image" class="img-carousel centered-image">
+                                    </div>
+                                </div>
+                                isFirst = false;
+                            }
+                        }
+                        else
+                        {
+                            <div class="carousel-item active">
+                                <div class="image-container">
+                                    <img src="~/Images/missingProductImage.png" alt="Image" class="img-carousel centered-image">
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+                <!-- buttons for switching image -->
+                <a class="carousel-control-prev" href="#imageCarousel" role="button" data-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                </a>
+                <a class="carousel-control-next" href="#imageCarousel" role="button" data-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                </a>
+            </div>
+    </div>
+    <div class="col-md-6">
+        <div class="Product-text">
+            <form>
+                <div class="Product-form-group">
+                    <label>Description:</label>
+                    <p class="product-info" style="font-size: 20px">@Model.Description</p>
+                </div>
+
+                <div class="Product-form-group">
+                    <label>Price:</label>
+                    <p class="product-info">@Model.Price</p>
+                </div>
+
+                <div class="Product-form-group">
+                    <label>Stock:</label>
+                    @{
+                        if (Model.StockAmount <= 0)
+                        {
+                            <h4 class="text-danger">Out of stock</h4>
+                        }
+                        else
+                        {
+                            <p class="product-info">@Model.StockAmount</p>
+                        }
+                    }
+
+                </div>
+            </form>
+            <div class="add-to-cart-grid">
+                <form asp-action="AddToCart" asp-controller="Customer" asp-route-productId="@Model.Id">
+                    @{
+                        if (Model.StockAmount > 0)
+                        {
+                            if (signInManager.IsSignedIn(User) && User.IsInRole("Customer"))
+                            {
+                                <button class="btn btn-success add-to-cart">Add to cart</button>
+                            }
+                            else if (!signInManager.IsSignedIn(User))
+                            {
+                                <h3 class="text-danger">You must sign in to add items to your cart</h3>
+                            }
+                        }
+                    }
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

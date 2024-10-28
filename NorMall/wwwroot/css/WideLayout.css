@@ -1,0 +1,123 @@
+﻿html, body {
+    overflow-x: hidden; 
+}
+
+.custom-container {
+    width: 100vw;
+}
+
+.index-main::before {
+    content: "";
+    background-image: url('../Images/Cold.png');
+    background-size: cover;
+    background-position: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 30vh;
+    z-index: -1;
+}
+
+.navbar-left {
+    background-color: transparent;
+    position: fixed;
+    top: 0px;
+    left: 0px;
+}
+
+.navbar-right {
+    position: fixed;
+    top: 0px;
+    right: 0px;
+}
+
+.navbar-left a {
+    font-size: 35px;
+}
+
+.custom-nav-link {
+    background-color: rgba(214,214,211,0.60);
+    padding-left: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.custom-nav-link:hover {
+    background-color: rgba(214,214,211,0.90);
+    transition: 0.3s;
+}
+
+.custom-nav-link img {
+    max-width: 40px;
+    max-height: 40px;
+}
+
+.nav-link {
+    background-color: rgba(214,214,211,0.60);
+    height: 100%;
+    margin-left: 10px;
+}
+.nav-link:hover {
+    background-color: rgba(214,214,211,0.90);
+    transition: 0.3s;
+}
+
+.custom-navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: transparent; 
+    z-index: 1000;
+}
+
+.custom-content {
+    padding-left: 10px;
+    padding-right: 10px; 
+}
+
+.navbar-details-button {
+    background-color: rgba(214,214,211,0.60);
+    padding: 0;
+    margin-left: 10px;
+    width: 70px;
+    height: 70px;
+}
+
+.navbar-details-button:hover {
+    background-color: rgba(214,214,211,0.90);
+    transition: 0.3s;
+}
+
+.grid-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.category-search-grid {
+    border: 2px solid black;
+    width: 19vw;
+    position: fixed;
+    top: 30vh;
+    height: 70vh;
+}
+
+.center-grid-container {
+    margin-left: 20vw;
+    width: 66vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+.advert-grid {
+    width: 10vw;
+    position: fixed;
+    margin-left: 88vw;
+    top: 10vh;
+    height: 80vh;
+    margin-right: 2vw;
+}

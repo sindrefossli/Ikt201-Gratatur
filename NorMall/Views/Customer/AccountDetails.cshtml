@@ -1,0 +1,58 @@
+﻿@using NorMall.Data
+@using System.Security.Cryptography
+@model ApplicationUser
+@inject ApplicationDbContext db
+
+@{
+    ViewBag.Title = "Account Details";
+    Layout = "_Layout";
+}
+
+<div class="row">
+    <div class="col-md-4">
+        <h2>Account Details</h2>
+    </div>
+    <div class="col-md-8 text-center">
+        <h2>Order History</h2>
+    </div>
+</div>
+
+
+<div class="container p-0">
+    <div class="row">
+        <div class="col-md-4">
+            <div>
+                <p>
+                    <strong>Username:</strong> @Model.Name
+                </p>
+                <p>
+                    <strong>Email:</strong> @Model.UserName
+                </p>
+            </div>
+            <p>
+                <a href="@Url.Action("Index", "Home")" class="btn btn-primary">Back to Home</a>
+            </p>
+        </div>
+        <div class="col-md-8">
+            <div class="row order-history-grid">
+                @{
+                    var orders = db.Orders.Where(o => o.ApplicationUserId == Model.Id).ToList(); //LIMIT TO FIVE PER USERS LOAD REQUEST
+                    if (orders.Count > 0)
+                    {
+                        foreach (var item in orders.OrderByDescending(Model => Model.DateTime))
+                        {
+                            @await Html.PartialAsync("_OrderHistory", item)
+                        }
+                    }
+                    else
+                    {
+                        <h2 class="text-danger text-center" style="margin-top: 30px">You have no orders yet</h2>
+                    }
+
+
+                }
+            </div>
+
+        </div>
+    </div>
+</div>

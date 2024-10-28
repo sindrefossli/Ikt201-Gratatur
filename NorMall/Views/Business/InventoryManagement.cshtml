@@ -1,0 +1,66 @@
+﻿@using Microsoft.IdentityModel.Tokens
+@model IEnumerable<Product>
+
+@{
+    ViewBag.Title = "Inventory Management";
+    Layout = "_Layout";
+}
+<div>
+    <div class="row">
+        <div class="col-md-9">
+            <h2>Inventory</h2>
+        </div>
+        <div class="col-md-3">
+            <a asp-controller="Business" asp-action="AddProduct" class="btn btn-success" style="width: 100%; height: 100%">Add new product</a>
+        </div>
+    </div>
+    
+    <table class="table">
+        <thead class="text-center">
+        <tr>
+            <th>Product</th>
+            <th>Price</th>
+            <th>In stock</th>
+            <th>Primary image</th>
+            <th></th> <!-- For the remove button -->
+        </tr>
+        </thead>
+        <tbody class="text-center">
+    @{
+                if (!Model.IsNullOrEmpty())
+                {
+                    foreach (var product in Model)
+                    {
+                        <tr class="product-element">
+                            <td>@Html.DisplayFor(modelItem => product.Name)</td>
+                            <td>@Html.DisplayFor(modelItem => product.Price)</td>
+                            <td>@Html.DisplayFor(modelItem => product.StockAmount)</td>
+                            <td class="product-element-image">
+                                @{
+                                    var image = product.Images.FirstOrDefault(i => i.OrderIndex == 0);
+    
+                                    if (image != null)
+                                    {
+                                       <img src="@Url.Action("GetImage", "Home", new { id = image.Id })" alt="Image"/> 
+                                    }
+                                }
+                            </td>
+                            <td>
+                                <div class="btn-group">
+                                    <a asp-controller="Business" asp-action="EditProduct" asp-route-id="@product.Id" class="btn btn-secondary listButton">Edit</a>
+                                    <form asp-controller="Business" asp-action="DeleteProduct" asp-route-id="@product.Id" method="post" enctype="multipart/form-data" style="margin-left: -2px">
+                                    <button type="submit" class="btn btn-danger listButton">Delete</button></form>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <h1 class="text-danger">Your business has no products yet</h1>
+                }
+            }
+        </tbody>
+    
+    </table>
+</div>

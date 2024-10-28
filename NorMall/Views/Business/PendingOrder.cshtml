@@ -1,0 +1,59 @@
+﻿@model List<ProductOrdered>
+
+@{
+    ViewBag.Title = "Pending Orders";
+    Layout = "_Layout"; 
+}
+
+<div>
+    <h2>Pending Orders</h2>
+
+@if (Model != null && Model.Any())
+{
+    @foreach (var pendingOrder in Model.GroupBy(po => po.OrderId))
+    {
+        @if (!pendingOrder.All(po => po.Sendt.GetValueOrDefault()))
+        {
+            <div class="pending-orders-boarder">
+                <div>
+                    <h3>Order Information</h3>
+                    <p>Order ID: @pendingOrder.Key</p>
+                    <p>Address: @pendingOrder.First().Order.ShippingAddress</p>
+                </div>
+
+                <h3>Products Ordered</h3>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Product Name</th>
+                        <th>Amount</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var product in pendingOrder.OrderBy(po => po.Order.DateTime))
+                    {
+                        <tr>
+                            <td>@Html.DisplayFor(modelItem => product.Product.Name)</td>
+                            <td>@Html.DisplayFor(modelItem => product.Quantity)</td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+
+                <form asp-action="MarkAsSent" asp-controller="Business" method="post">
+                    <input type="hidden" name="id" value="@pendingOrder.Key" />
+                    <button type="submit">Mark as sent</button>
+                </form>
+
+            </div> 
+        }
+    }
+
+
+
+}
+    else
+    {
+          <p>No products were found in any pending orders.</p>
+    }
+     </div>

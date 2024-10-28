@@ -1,0 +1,98 @@
+﻿@model ApplicationUser
+
+@{
+    ViewBag.Title = "Business Details";
+    Layout = "_LayoutWide";
+
+}
+
+<div class="grid-container">
+    <div class="category-search-grid" style="border: 0">
+        
+    </div>
+    <div class="center-grid-container">
+        <div class="row bannerContainer">
+            @{
+                var activeConfig = Model.Business.HomePageConfig.FirstOrDefault(config => config.Active);
+                var bannerImage = activeConfig?.Images.FirstOrDefault(image => image.EntityType == "Banner");
+                var bannerImageId = bannerImage?.Id;
+
+
+                if (bannerImageId != null)
+                {
+                    <img src="@Url.Action("GetImage", "Home", new { id = bannerImageId })" alt="Image" class="bannerImage">
+                }
+                else
+                {
+                    <img src="@Url.Action("GetImage", "Home", new { id = 1 })" alt="Image" class="bannerImage">
+                }
+            }
+        </div>
+        <div class="row divButtons">
+            <div class="col-md-4">
+                <a asp-controller="Business" asp-action="PendingOrder" style="text-decoration: none">
+                    <button class="detailsButton text-center">Pending Orders</button>
+                </a>
+            </div>
+
+            
+            <div class="col-md-4">
+                <a asp-controller="Business" asp-action="AddHomePageConfig" style="text-decoration: none">
+                    <button class="detailsButton text-center" style="margin: 0">Edit home page</button>
+                </a>
+                @{
+                    var homepageConfigs = Model.Business.HomePageConfig;
+                    if (homepageConfigs.Count != 0)
+                    {
+                        @using (Html.BeginForm("SetActiveHomePageConfig", "Business", FormMethod.Post, new { id = "HomePageConfigForm" }))
+                        {
+                            <select class="form-select" id="HomePageConfigSelect" name="id" onchange="this.form.submit()">
+                                @if (activeConfig != null)
+                                {
+                                    <option value="">@activeConfig.Name</option>
+                                    @foreach (var config in Model.Business.HomePageConfig)
+                                    {
+                                        <option value="@config.Id">@config.Name</option>
+                                    }
+                                }
+                                else
+                                {
+                                    <option value="">No configs to choose between</option>
+                                }
+
+                            </select>
+                        }
+                    }
+                }
+
+
+            </div>
+            <div class="col-md-4">
+                <a asp-controller="Business" asp-action="InventoryManagement" style="text-decoration: none">
+                    <button class="detailsButton text-center">Manage Inventory</button>
+                </a>
+            </div>
+
+                <button class="infoButton">
+                    @Model.Name <br/> @Model.Business.Name
+                </button>
+        </div>
+    </div>
+    <div class="advert-grid">
+        @{
+            var advertImage = activeConfig?.Images.FirstOrDefault(image => image.EntityType == "Advert");
+            var advertImageId = advertImage?.Id;
+
+
+            if (advertImageId != null)
+            {
+                <img src="@Url.Action("GetImage", "Home", new { id = advertImageId })" alt="Image" class="advertImage">
+            }
+            else
+            {
+                <img src="@Url.Action("GetImage", "Home", new { id = 2 })" alt="Image" class="advertImage">
+            }
+        }
+
+    </div>
+</div>

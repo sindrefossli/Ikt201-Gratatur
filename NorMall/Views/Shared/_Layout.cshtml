@@ -1,0 +1,73 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>@ViewData["Title"]</title>
+    <link rel="icon" href="~/faviconBlackNorMall256pixels.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="~/faviconBlackNorMall256pixels.ico" type="image/x-icon">
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
+    <link rel="stylesheet" href="~/css/BusinessDetails.css" asp-append-version="true"/>
+    <link rel="stylesheet" href="~/css/WideLayout.css" asp-append-version="true"/>
+    <link rel="stylesheet" href="~/css/CustomerViews.css" asp-append-version="true"/>
+    <link rel="stylesheet" href="~/css/HomeViews.css" asp-append-version="true"/>
+    <link rel="stylesheet" href="~/css/shopsite.css" asp-append-version="true"/>
+    <link rel="stylesheet" href="~/NorMall.styles.css" asp-append-version="true"/>
+    <link rel="stylesheet" href="~/css/Carousel.css" asp-append-version="true"/>
+</head>
+<body>
+<header class="custom-navbar">
+    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white bg-transparent box-shadow mb-3" style="padding-top: 0; padding-bottom: 0; background-color: transparent;">
+        <div class="navbar-left">
+            <ul style="list-style: none; padding-left: 0">
+                <li class="custom-nav-link">
+                    <img src="~/Images/blackNorMallLogo.png" alt="Image">
+                    <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">NorMall</a>
+                </li>
+                @{
+                    if (SignInManager.IsSignedIn(User))
+                    {
+                        var user = await UserManager.GetUserAsync(User);
+                        if (user != null)
+                        {
+                            if (await UserManager.IsInRoleAsync(user, "BusinessOwner"))
+                            {
+                                <li class="custom-nav-link">
+                                    <img src="~/Images/ShopFrontIcon.png" alt="Image">
+                                    <a class="navbar-brand" id="shopLink" asp-area="" asp-controller="Home" asp-action="BusinessFrontPage" asp-route-businessId="@user.BusinessId">Your shop</a>
+                                </li>
+                            }
+                            else if (await UserManager.IsInRoleAsync(user, "Customer"))
+                            {
+                                <li class="custom-nav-link">
+                                    <img src="~/Images/ShoppingCartImage.png" alt="Image">
+                                    <a class="navbar-brand" asp-area="" asp-controller="Customer" asp-action="ShoppingCart">Shopping cart</a>
+                                </li>
+                            }
+                        }
+                    }
+                }
+            </ul>
+        </div>
+        <div class="navbar-right">
+            <partial name="_LoginPartial"/>
+        </div>
+    </nav>
+</header>
+<div class="container main-container pb-0">
+    <main role="main" class="pb-0">
+        @RenderBody()
+    </main>
+</div>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>
+<script src="~/js/Carousel.js" asp-append-version="true"></script>
+@await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

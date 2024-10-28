@@ -1,0 +1,99 @@
+﻿@model Product
+
+@{
+    ViewBag.Title = "Edit Product";
+    Layout = "_Layout";
+}
+
+<h2>Edit Product</h2>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="row">
+            <div class="col-md-4">
+                <form method="post" asp-controller="Business" asp-action="EditProduct">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="Id"/>
+
+                    <div class="form-group">
+                        <label asp-for="Name" class="control-label"></label>
+                        <input asp-for="Name" class="form-control"/>
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="StockAmount" class="control-label"></label>
+                        <input asp-for="StockAmount" min="0" class="form-control"/>
+                        <span asp-validation-for="StockAmount" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Price" class="control-label"></label>
+                        <input asp-for="Price" min="0" class="form-control"/>
+                        <span asp-validation-for="Price" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Description" class="control-label"></label>
+                        <textarea asp-for="Description" class="form-control"></textarea>
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+                    <input type="Submit" value="Save Changes" class="btn btn-primary" style="margin-top: 10px"/>
+                </form>
+            </div>
+        </div>
+        <div class="row edit-categories-list">
+            <div class="col-md-8">
+                <form asp-action="AddCategory" asp-route-productId="@Model.Id" method="post" enctype="multipart/form-data">
+                    <h4>Categories:</h4>
+                
+                    <input type="string" name="newCategory" minlength="2" maxlength="20" style="margin-bottom: 10px; padding: 4px; border-radius: 5px"/>
+                    <button type="submit" class="btn btn-success">Add category</button>
+                </form>
+                <ul style="list-style: none">
+                    @{
+                        foreach (var category in Model.Categories)
+                        {
+                            <li class="edit-category-list-item">
+                                @category.Name
+                                <form asp-action="RemoveCategory" asp-route-productId="@Model.Id" method="post" style="display: inline-block;">
+                                    <input type="hidden" name="categoryId" value="@category.Id"/>
+                                    <button type="submit" class="btn btn-danger">Remove</button>
+                                </form>
+                            </li>
+                        }
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <form asp-action="AddImage" asp-route-productId="@Model.Id" method="post" enctype="multipart/form-data">
+            <h4>Images: <div style="font-size: 16px">Upload a single image or a zip folder with images. <br/> You can also change the order of the images being displayed</div></h4>
+
+            <input type="file" name="inputFile" class="btn-primary" style="margin-bottom: 10px; padding: 4px; border-radius: 5px" accept="image/*,.zip" onchange="this.form.submit()"/>
+        </form>
+        <form asp-action="UpdateImageOrder" asp-route-productId="@Model.Id" method="post" enctype="multipart/form-data">
+            <div class="row edit-images-list">
+                @foreach (var image in Model.Images.OrderBy(i => i.OrderIndex))
+                {
+                    <div class="col-md-4 image-list-item text-center">
+                        <img src="@Url.Action("GetImage", "Home", new { id = image.Id })" alt="Image">
+
+                        
+                        <input type="number" name="userDefinedOrder[@image.Id]" value="@(image.OrderIndex + 1)" style="width: 50px;">
+
+                        <button class="btn btn-primary" asp-action="RemoveImage" asp-route-productId="@Model.Id" asp-route-imageId="@image.Id" style="margin-top: 5px">Remove</button>
+                    </div>
+                }
+                @{
+                    if (Model.Images.Count > 0)
+                    {
+                        <input type="submit" value="Set image order" class="btn btn-primary" style="margin-top: 10px">
+                    }
+                }
+            </div>
+        </form>
+
+    </div>
+</div>

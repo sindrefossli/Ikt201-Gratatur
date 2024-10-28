@@ -1,0 +1,41 @@
+@{
+    Layout = "_Layout";
+}
+
+<h2>Payment Information</h2>
+<div class="row">
+    <div class="col-md-4">
+        <form>
+            <div class="form-group">
+                <labe class="control-label">Card Number</labe>
+                <input class="form-control"/>
+            </div>
+            
+            <div class="form-group">
+                <label class="control-label">Expiry Month</label>
+                <input class="form-control"/>
+            </div>
+            
+            <div class="form-group">
+                <label class="control-label">Expiry Year</label>
+                <input class="form-control"/>
+            </div>
+            
+            <div class="form-group">
+                <label class="control-label">Card Holder Name</label>
+                <input class="form-control"/>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label"></label>
+                <input class="form-control"/>
+            </div>
+        </form>
+        <form asp-controller="Customer" asp-action="ConfirmOrder" method="post" enctype="multipart/form-data" style="display: inline-block;">
+            <label for="Address">Address</label>
+            <input  type="text" class="input-group" name="address" required/>
+            <button class="btn btn-success">Confirm order</button>
+        </form>
+    </div>
+</div>
+

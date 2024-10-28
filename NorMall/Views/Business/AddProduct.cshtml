@@ -1,0 +1,46 @@
+﻿@model Product
+
+
+@{
+    ViewBag.Title = "Add Product";
+    Layout = "_Layout";
+}
+
+<h2>Add Product</h2>
+
+<div class="row">
+    <div class="col-md-4">
+        <form method="post" asp-controller="Business" asp-action="AddProduct" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control"/>
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="StockAmount" class="control-label"></label>
+                <input asp-for="StockAmount" min="0" class="form-control"/>
+                <span asp-validation-for="StockAmount" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Price" class="control-label"></label>
+                <input asp-for="Price" min="0" class="form-control"/>
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <textarea asp-for="Description" maxlength="500" class="form-control"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+
+            <input type="Submit" value="Submit" id="Submit" class="btn btn-primary" style="margin-top: 10px"/>
+        </form>
+    </div>
+    <div class="col-md-2"></div>
+    <div class="col-md-4 text-center" style="margin-top: 15vh">
+        <h2>Further configure your product with categories and images by editing it after you have created it.</h2>
+    </div>
+</div>
